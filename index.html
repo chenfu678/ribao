@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>每日工作记录</title>
+    <style>
+body {
+    font-family: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+    background: linear-gradient(120deg, #e0e7ff 0%, #f4f6fa 100%);
+    margin: 0;
+    padding: 0;
+}
+.container {
+    max-width: 650px;
+    margin: 48px auto 24px auto;
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px rgba(25, 118, 210, 0.08), 0 1.5px 6px rgba(0,0,0,0.04);
+    padding: 32px 28px 24px 28px;
+    transition: box-shadow 0.2s;
+}
+h1 {
+    text-align: center;
+    color: #1976d2;
+    letter-spacing: 2px;
+    margin-bottom: 18px;
+}
+.record-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+#date {
+    width: 180px;
+    padding: 7px 10px;
+    border-radius: 5px;
+    border: 1px solid #bfc8d6;
+    font-size: 15px;
+    background: #f7faff;
+    transition: border 0.2s;
+}
+#date:focus {
+    border: 1.5px solid #1976d2;
+    outline: none;
+}
+.input-mode {
+    display: flex;
+    gap: 18px;
+    margin-bottom: 2px;
+    font-size: 15px;
+    color: #555;
+}
+.input-mode input[type="radio"] {
+    margin-right: 4px;
+}
+#content {
+    min-height: 100px;
+    padding: 10px;
+    resize: vertical;
+    font-size: 16px;
+    border-radius: 6px;
+    border: 1px solid #bfc8d6;
+    background: #f7faff;
+    transition: border 0.2s;
+}
+#content:focus {
+    border: 1.5px solid #1976d2;
+    outline: none;
+}
+.input-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 2px;
+}
+#addNumberBtn {
+    background: #e3eafc;
+    color: #1976d2;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s;
+}
+#addNumberBtn:hover {
+    background: #bbd0f7;
+}
+#saveBtn {
+    min-width: 100px;
+    align-self: flex-end;
+    padding: 9px 0;
+    background: linear-gradient(90deg, #1976d2 60%, #42a5f5 100%);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 500;
+    box-shadow: 0 1px 4px rgba(25, 118, 210, 0.08);
+    transition: background 0.2s;
+}
+#saveBtn:hover {
+    background: linear-gradient(90deg, #1565c0 60%, #1976d2 100%);
+}
+hr {
+    border: none;
+    border-top: 1.5px solid #e3eafc;
+    margin: 28px 0 18px 0;
+}
+.history {
+    margin-top: 18px;
+}
+.history h2 {
+    color: #1976d2;
+    font-size: 20px;
+    margin-bottom: 10px;
+    letter-spacing: 1px;
+}
+#search {
+    width: 100%;
+    padding: 7px 10px;
+    margin-bottom: 12px;
+    font-size: 15px;
+    border-radius: 4px;
+    border: 1px solid #bfc8d6;
+    background: #f7faff;
+    transition: border 0.2s;
+}
+#search:focus {
+    border: 1.5px solid #1976d2;
+    outline: none;
+}
+#exportWeekBtn {
+    background: #e3eafc;
+    color: #1976d2;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-left: 0;
+    transition: background 0.2s;
+}
+#exportWeekBtn:hover {
+    background: #bbd0f7;
+}
+#historyList {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: none;
+    overflow: visible;
+}
+.history-item {
+    background: #f9f9f9;
+    margin-bottom: 12px;
+    padding: 14px 14px 10px 14px;
+    border-radius: 7px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    box-shadow: 0 1px 4px rgba(25, 118, 210, 0.04);
+    border-left: 4px solid #1976d2;
+}
+.history-date {
+    font-weight: bold;
+    color: #1976d2;
+    font-size: 15px;
+}
+.history-content {
+    margin: 7px 0 0 0;
+    white-space: pre-wrap;
+    max-height: none;
+    overflow: visible;
+    font-size: 15px;
+    color: #333;
+}
+.history-actions {
+    position: absolute;
+    right: 14px;
+    top: 14px;
+}
+.history-actions button {
+    background: none;
+    border: none;
+    color: #1976d2;
+    cursor: pointer;
+    margin-left: 10px;
+    font-size: 14px;
+    padding: 0;
+    transition: color 0.2s;
+}
+.history-actions button:hover {
+    color: #1565c0;
+}
+@media (max-width: 700px) {
+    .container {
+        margin: 0;
+        border-radius: 0;
+        box-shadow: none;
+        padding: 10px;
+    }
+    .history-item {
+        padding: 10px 7px 7px 7px;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>每日工作记录</h1>
+        <div class="record-form">
+            <label for="date">日期：</label>
+            <input type="date" id="date">
+            <div class="input-mode">
+                <label><input type="radio" name="mode" value="normal" checked> 普通模式</label>
+                <label><input type="radio" name="mode" value="numbered"> 编号模式</label>
+            </div>
+            <textarea id="content" placeholder="请输入今天的工作内容..."></textarea>
+            <div class="input-actions">
+                <button id="addNumberBtn" type="button" style="display:none">添加编号</button>
+                <button id="saveBtn">保存</button>
+            </div>
+        </div>
+        <hr>
+        <div class="history">
+            <h2>历史记录</h2>
+            <input type="text" id="search" placeholder="搜索日期或内容...">
+            <button id="exportWeekBtn">导出本周记录</button>
+            <ul id="historyList"></ul>
+        </div>
+    </div>
+    <script>
+// 工具函数：获取、保存、删除记录
+function getRecords() {
+    const data = localStorage.getItem('workRecords');
+    return data ? JSON.parse(data) : [];
+}
+function saveRecords(records) {
+    localStorage.setItem('workRecords', JSON.stringify(records));
+}
+function findRecordByDate(records, date) {
+    return records.find(r => r.date === date);
+}
+// 获取本周的起止日期（周一到周日）
+function getCurrentWeekRange() {
+    const now = new Date();
+    const day = now.getDay() || 7; // 周日为0，转为7
+    const monday = new Date(now);
+    monday.setDate(now.getDate() - day + 1);
+    const sunday = new Date(monday);
+    sunday.setDate(monday.getDate() + 6);
+    return {
+        start: monday.toISOString().slice(0, 10),
+        end: sunday.toISOString().slice(0, 10)
+    };
+}
+// 渲染历史记录，支持传入自定义范围
+function renderHistory(filter = '', weekOnly = false) {
+    const list = document.getElementById('historyList');
+    list.innerHTML = '';
+    let records = getRecords();
+    if (weekOnly) {
+        const { start, end } = getCurrentWeekRange();
+        records = records.filter(r => r.date >= start && r.date <= end);
+    }
+    if (filter) {
+        records = records.filter(r => r.date.includes(filter) || r.content.includes(filter));
+    }
+    records.sort((a, b) => b.date.localeCompare(a.date)); // 升序，最新在下
+    if (records.length === 0) {
+        const li = document.createElement('li');
+        li.className = 'history-item';
+        li.innerHTML = '<span class="history-content">本周暂无记录</span>';
+        list.appendChild(li);
+        return;
+    }
+    for (const record of records) {
+        const li = document.createElement('li');
+        li.className = 'history-item';
+        li.innerHTML = `
+            <span class="history-date">${record.date}</span>
+            <span class="history-content">${record.content.replace(/\n/g, '<br>')}</span>
+            <div class="history-actions">
+                <button onclick="editRecord('${record.date}')">编辑</button>
+                <button onclick="deleteRecord('${record.date}')">删除</button>
+            </div>
+        `;
+        list.appendChild(li);
+    }
+}
+// 保存按钮事件
+function saveRecord() {
+    const date = document.getElementById('date').value;
+    const content = document.getElementById('content').value.trim();
+    if (!date) {
+        alert('请选择日期');
+        return;
+    }
+    if (!content) {
+        alert('请输入内容');
+        return;
+    }
+    let records = getRecords();
+    const exist = findRecordByDate(records, date);
+    if (exist) {
+        if (!confirm('该日期已有记录，是否覆盖？')) return;
+        exist.content = content;
+    } else {
+        records.push({ date, content });
+    }
+    saveRecords(records);
+    renderHistory(document.getElementById('search').value, true);
+    alert('保存成功！');
+}
+// 编辑
+function editRecord(date) {
+    const records = getRecords();
+    const record = findRecordByDate(records, date);
+    if (record) {
+        document.getElementById('date').value = record.date;
+        document.getElementById('content').value = record.content;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+// 删除
+function deleteRecord(date) {
+    if (!confirm('确定要删除该记录吗？')) return;
+    let records = getRecords();
+    records = records.filter(r => r.date !== date);
+    saveRecords(records);
+    renderHistory(document.getElementById('search').value, true);
+}
+// 搜索
+function onSearch() {
+    const val = document.getElementById('search').value.trim();
+    renderHistory(val, true);
+}
+// 导出本周记录为txt
+function exportCurrentWeek() {
+    const { start, end } = getCurrentWeekRange();
+    const records = getRecords().filter(r => r.date >= start && r.date <= end);
+    if (records.length === 0) {
+        alert('本周暂无记录');
+        return;
+    }
+    let content = `本周工作记录（${start} ~ ${end}）\n\n`;
+    records.sort((a, b) => a.date.localeCompare(b.date));
+    for (const r of records) {
+        content += `【${r.date}】\n${r.content}\n\n`;
+    }
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `本周工作记录_${start}_to_${end}.txt`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+// 输入模式切换与编号功能
+const contentTextarea = document.getElementById('content');
+const modeRadios = document.getElementsByName('mode');
+const addNumberBtn = document.getElementById('addNumberBtn');
+let inputMode = 'normal';
+modeRadios.forEach(radio => {
+    radio.addEventListener('change', function() {
+        inputMode = this.value;
+        if (inputMode === 'numbered') {
+            // 自动补第一个编号
+            if (!contentTextarea.value.startsWith('1. ')) {
+                contentTextarea.value = '1. ';
+            }
+            addNumberBtn.style.display = '';
+        } else {
+            addNumberBtn.style.display = 'none';
+        }
+    });
+});
+contentTextarea.addEventListener('keydown', function(e) {
+    if (inputMode === 'numbered' && e.key === 'Enter') {
+        e.preventDefault();
+        const lines = contentTextarea.value.split('\n');
+        let lastLine = lines[lines.length - 1];
+        let match = lastLine.match(/^(\d+)\.\s/);
+        let nextNum = 1;
+        if (match) {
+            nextNum = parseInt(match[1], 10) + 1;
+        } else if (lines.length > 0) {
+            nextNum = lines.length + 1;
+        }
+        contentTextarea.value += '\n' + nextNum + '. ';
+        setTimeout(() => {
+            contentTextarea.selectionStart = contentTextarea.selectionEnd = contentTextarea.value.length;
+        }, 0);
+    }
+});
+addNumberBtn.addEventListener('click', function() {
+    const lines = contentTextarea.value.split('\n');
+    let lastNum = 0;
+    for (let i = lines.length - 1; i >= 0; i--) {
+        const m = lines[i].match(/^(\d+)\.\s/);
+        if (m) {
+            lastNum = parseInt(m[1], 10);
+            break;
+        }
+    }
+    const nextNum = lastNum + 1;
+    const start = contentTextarea.selectionStart;
+    const end = contentTextarea.selectionEnd;
+    const before = contentTextarea.value.substring(0, start);
+    const after = contentTextarea.value.substring(end);
+    const insertText = (before && !before.endsWith('\n') ? '\n' : '') + nextNum + '. ';
+    contentTextarea.value = before + insertText + after;
+    const cursorPos = before.length + insertText.length;
+    contentTextarea.selectionStart = contentTextarea.selectionEnd = cursorPos;
+    contentTextarea.focus();
+});
+document.getElementById('saveBtn').addEventListener('click', saveRecord);
+document.getElementById('search').addEventListener('input', onSearch);
+document.getElementById('exportWeekBtn').addEventListener('click', exportCurrentWeek);
+document.addEventListener('DOMContentLoaded', () => {
+    // 默认填入今天日期（本地年月日，兼容所有浏览器）
+    const dateInput = document.getElementById('date');
+    if (dateInput) {
+        const today = new Date();
+        const yyyy = today.getFullYear();
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const dd = String(today.getDate()).padStart(2, '0');
+        dateInput.value = `${yyyy}-${mm}-${dd}`;
+    }
+    renderHistory('', true); // 默认只展示本周
+});
+    </script>
+</body>
+</html>
